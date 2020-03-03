@@ -1,0 +1,18 @@
+{
+  "name": "twi",
+  "version": "1.0.0",
+  "description": "Twitter API for Node.js with its own OAuth 1.0 signature-calculus algorithm",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.0.0",
+    "oauth-signature": "^1.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "minot0r",
+  "license": "ISC"
+}
