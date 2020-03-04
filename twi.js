@@ -6,18 +6,7 @@
 
 const axios = require('axios')
 
-const Req = require('./req')
-const RFC3986 = require('./encode')
 const OAuth1Utils = require('./oauth1')
-
-const endpoints = {
-    statuses: {
-        update: new Req('POST', 'https://api.twitter.com/1.1/statuses/update.json', false),
-        destroy: new Req('POST', 'https://api.twitter.com/1.1/statuses/destroy/%s.json', true),
-        show: new Req('GET', 'https://api.twitter.com/1.1/statuses/show.json', false),
-
-    }
-}
 
 const Twi = class {
     constructor(api, api_secret, token, token_secret) {
@@ -29,17 +18,48 @@ const Twi = class {
         }
     }
 
-    async sendTweet(text) {
-        let OAuthReq = new OAuth1Utils(endpoints.statuses.update.method,
-            endpoints.statuses.update.endpoint, 
-            { status: text },
+    async get(url, parameters) {
+        let OAuthReq = new OAuth1Utils(
+            'GET',
+            url,
+            parameters,
             this.credentials.api,
             this.credentials.api_secret,
             this.credentials.token,
             this.credentials.token_secret
         ).generate()
-        let res = await axios.post(OAuthReq.fullURL, {}, { headers: {'Authorization': OAuthReq.authorizationHeader} })
-        return res.data
+        try {
+            let res = await axios.get(
+                OAuthReq.fullURL,
+                {},
+                { 
+                    headers: {'Authorization': OAuthReq.authorizationHeader} 
+                }
+            )
+            return res
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    async post(url, parameters) {
+        let OAuthReq = new OAuth1Utils(
+            'POST',
+            url,
+            parameters,
+            this.credentials.api,
+            this.credentials.api_secret,
+            this.credentials.token,
+            this.credentials.token_secret
+        ).generate()
+        let res = await axios.post(
+            OAuthReq.fullURL,
+            {},
+            { 
+                headers: {'Authorization': OAuthReq.authorizationHeader} 
+            }
+        )
+        console.log(res)
     }
 }
 
